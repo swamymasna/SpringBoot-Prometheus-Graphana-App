@@ -1,0 +1,75 @@
+SpringBoot with Prometheus & Graphana:
+--------------------------------------
+
+1) Create the SpringBoot Application with Below Dependencies
+    spring-web, springboot-actuator, prometheus, springboot-devtools
+
+2) add below properties in application.properties file:
+```````````````````````````````````````````````````````
+server.port=8081
+
+management.endpoints.web.exposure.include=*
+management.endpoint.health.show-details=always
+
+3) Implement One REST API :
+```````````````````````````
+package com.swamy.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/welcome")
+public class WelcomeRestController {
+
+	@GetMapping
+	public String showMessage() {
+		return "Welcome to SprinBoot With Prometheus & Graphana..!";
+	}
+}
+
+4) Run the SpringBoot Application & Enter below URL in the Browser.
+ 
+ http://localhost:8081/actuator
+ http://localhost:8081/actuator/prometheus
+
+
+5)Install 'Prometheus Software':
+--------------------------------
+
+> docker pull prom/prometheus
+
+> docker images
+
+> docker run -p 9090:9090 -v /F:/STS4-2023/SBMS/SB02-Prometheus-Graphana-App/src/main/resources/prometheus.yml prom/prometheus
+
+6) Enter below URL in the Browser to access Prometheus Dashboard.
+
+ http://localhost:9090
+
+7) pull & run the grafana software
+
+> docker run -d --name=grafana -p 3000:3000 grafana/grafana
+
+8) Enter Below URL in the Browser to Access Grafana Dashboard
+ 
+ http://localhost:3000
+
+[enter default credentials as follows]
+-> Username : admin
+-> Password : admin
+
+i. Click on 'Add Your First Data Source'
+ii. Click on 'Prometheus'
+iii. Change Database Name : Prometheus-Microservices-DB
+iii. Enter URL in the HTTP-URL-Section as follows
+
+	http://host.docker.internal:9090
+
+iv. click on 'Save & Test'.
+v. click on 'Menu' button above to the 'Explore' button -> Import -> Choose JSON File : Grafana_Dashboard.json
+-> Select Created Database under 'Prometheus' Section
+	Prometheus-Microservices-DB [Selected]
+-> Click on Import
+
+v. Then we will access Beautiful UI.
+	
